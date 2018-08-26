@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<node>
+  <FileName>@TableName.cs</FileName>
+  <Fields>
+    
+    <ProtectedField For="ALL">
+      protected @FieldType _@FieldName;
+    </ProtectedField>
+    
+    <Append For="ALL">
+          sb.Append(_@FieldName);
+    </Append>
+    
+    <Getter For="ALL">
+      public @FieldType @FieldName
+      {
+        get { return _@FieldName; }
+        set { _@FieldName = value; }
+      }
+    </Getter>
+  </Fields>
+
+  <BaseCode>
+using System;
+using System.Collections;
+
+namespace @NameSpace.Domain.BusinessObjects
+{
+    public class @TableName
+    {
+      #region Member Variables
+
+      @ProtectedField
+
+      #endregion
+
+      #region Constructors
+
+      public @TableName { }
+
+      public override int GetHashCode()
+      {
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+
+        sb.Append(this.GetType().FullName);
+        @Append
+
+        return sb.ToString().GetHashCode();
+      }
+
+      #endregion
+
+      #region Public Properties
+  
+      @Getter
+
+      #endregion
+    }
+}
+  </BaseCode>
+</node>

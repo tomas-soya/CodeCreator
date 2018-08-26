@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<node>
+  <FileName>@TableName.hbm.xml</FileName>
+  <Fields>
+    <Property For="ALL">
+<![CDATA[
+<property name="@FieldName" column="[@FieldName]" />
+]]>
+
+    </Property>
+  </Fields>
+  <BaseCode>
+    <![CDATA[
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="@NameSpace.Domain.BusinessObjects" assembly="@NameSpace.Domain">
+  <class name="@NameSpace.Domain.BusinessObjects.@TableName, @NameSpace.Domain" table="[dbo].[@TableName]" lazy="true">
+    <id name="Id" column="[Id]">
+      <generator class="assigned" />
+    </id>
+    @Property
+  </class>
+</hibernate-mapping>
+]]>
+
+  </BaseCode>
+</node>
