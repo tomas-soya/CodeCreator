@@ -75,6 +75,8 @@ namespace CodeCreator.Models
         public string InputType { get; set; }
 
         public int OrderIndex { get; set; }
+
+        public bool IsKey { get; set; }
     }
 
     public class DBField

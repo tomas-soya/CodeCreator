@@ -195,11 +195,14 @@ namespace CodeCreator.Utils
                         ForDetail = false,
                         ForList = false,
                         ForSearch = false,
+                        IsKey = false,
                         OrderIndex = i,
                         CHName= "",
                         FieldName= currentFieldList[i].Name,
                         InputType=GlobalVariable.InputType._textbox,
                     };
+                    if (currentFieldList[i].Name.ToLower() == "id")
+                        f.IsKey = true;
                     f.FieldType = DBTypeConverter(f.FieldDBType);
                 }
                 InsertData(f);
