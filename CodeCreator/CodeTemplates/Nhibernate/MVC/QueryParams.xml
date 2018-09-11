@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<node>
+  <FileName>@TableNameQueryParams.cs</FileName>
+  <Fields>
+    <Property For="ALL">
+      <![CDATA[
+<property name="@FieldName" column="[@FieldName]" />
+]]>
+
+    </Property>
+  </Fields>
+  <BaseCode>
+<![CDATA[
+using @NameSpace.Core.Utils;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace @NameSpace.Management.QueryParamModel
+{
+    public class @TableNameQueryParams : DataTablesParameters
+    {
+        /// <summary>
+        ///操作人
+        /// </summary>
+        public string czr { get; set; }
+
+        /// <summary>
+        /// 操作类型
+        /// </summary>
+        public string czlx { get; set; }
+
+        /// <summary>
+        /// 操作日期
+        /// </summary>
+        public string  czrq { get; set; }
+
+        public DateTime bt
+        {
+            get
+            {
+                DateTime b = DateTime.MinValue.AddYears(1900);
+                if (czrq != "" && czrq != null)
+                {
+                    czrq = czrq.Replace(" - ", "*");
+                    var tmp = czrq.Split('*');
+                    DateTime.TryParse(tmp[0], out b);
+                }
+                return b;
+            }
+        }
+
+        public DateTime et
+        {
+            get
+            {
+                DateTime e = DateTime.MaxValue;
+                if (czrq != "" && czrq != null)
+                {
+                    czrq = czrq.Replace(" - ", "*");
+                    var tmp = czrq.Split('*');
+                    DateTime.TryParse(tmp[1], out e);
+                }
+                return e;
+            }
+        }
+    }
+}
+]]>
+
+  </BaseCode>
+</node>

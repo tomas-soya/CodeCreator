@@ -42,5 +42,18 @@ namespace CodeCreator
             public const string _date = "Date";
             public const string _dictionary = "Dictionary";
         }
+
+        public class SearchType
+        {
+            public const string _eq = "=";
+            public const string _gt = ">";
+            public const string _ge = ">=";
+            public const string _lt = "<";
+            public const string _le = "<=";
+            public const string _between = "Between";
+            public const string _anywhere = "Anywhere";
+            public const string _startwith = "StartWith";
+            public const string _endwith = "EndWith";
+        }
     }
 }

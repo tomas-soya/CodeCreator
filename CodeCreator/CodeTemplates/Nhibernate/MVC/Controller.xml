@@ -1,1 +1,189 @@
-﻿<?xml version="1.0" encoding="utf-8" ?> 
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<node>
+  <FileName>@TableNameController.cs</FileName>
+  <Fields>
+    <SearchCriteria For="Search">
+criteria.Add(NH_PublicCode.GetCriterion("@SearchType", "@FieldName", para.@FieldName));
+    </SearchCriteria>
+  </Fields>
+
+  <BaseCode>
+<![CDATA[
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using @NameSpace.Management.QueryParamModel;
+using @NameSpace.Management.Service;
+using @NameSpace.Management.Models;
+using @NameSpace.Domain.Base;
+using @NameSpace.Core.Utils;
+using @NameSpace.Domain.ManagerObjects;
+using @NameSpace.Domain.BusinessObjects;
+using NHibernate;
+
+namespace @NameSpace.Management.Controllers
+{
+    public class @TableNameController : Controller
+    {
+        //
+        // GET: /@TableName/
+
+        public ActionResult @TableNameIndex()
+        {
+            return View();
+        }
+
+        public JsonResult Get@TableNameList(@TableNameParams para)
+        {
+            IList<@TableName> result = new List<@TableName>();
+            using (NHibernateSession session = new NHibernateSession(LSMISConnectionManager.GetRunningLSMISDatabaseConnection()))
+            {
+                ICriteria criteria = session.GetISession().CreateCriteria(typeof(@TableName));
+                @SearchCriteria
+                
+                result = criteria.List<@TableName>().ToList();
+                
+                #region 自定义查询/排序语句
+                
+                #endregion
+            }
+
+            int total = result.Count;
+            result = result.Skip(para.Start).Take(para.Length).ToList();
+            return new JsonResult()
+            {
+                Data = new
+                {
+                    draw = para.Draw,
+                    recordsTotal = total,
+                    recordsFiltered = total,
+                    data = result
+                }
+            };
+        }
+
+        public ActionResult AddOrEditData(int? id)
+        {
+            Sqjccq row = new Sqjccq();
+            using (NHibernateSession session = new NHibernateSession(LSMISConnectionManager.GetRunningLSMISDatabaseConnection()))
+            {
+                if (id == null)
+                {
+                    row.Cjsj = DateTime.Now;
+                    row.Id = 0;
+                    row.Cqid = Guid.NewGuid().ToString();
+                }
+                else
+                {
+                    row = session.GetISession().QueryOver<Sqjccq>().Where(tb => tb.Id == id.Value).List()[0];
+                }
+            }
+            return PartialView(row);
+        }
+
+        public ActionResult AddOrEditSj(string cqid, int? id)
+        {
+            Sqjccqsj row = new Sqjccqsj();
+            using (NHibernateSession session = new NHibernateSession(LSMISConnectionManager.GetRunningLSMISDatabaseConnection()))
+            {
+                if (id == null)
+                {
+                    row.Cqid = cqid;
+                    row.Id = 0;
+                }
+                else
+                {
+                    row = session.GetISession().QueryOver<Sqjccqsj>().Where(tb => tb.Id == id.Value).List()[0];
+                }
+            }
+            return PartialView(row);
+        }
+
+
+        public string SaveOrUpdateData(Sqjccq row)
+        {
+            try
+            {
+                if (!Core.Utils.AuthorityUtil.isLQDKDMContains(row.Lqdkdm))
+                    return ("两区地块代码无效！");
+                using (NHibernateSession session = new NHibernateSession(LSMISConnectionManager.GetRunningLSMISDatabaseConnection()))
+                {
+                    var manager = ManagerFactory.Instance.CreateSqjccqManager(session);
+                    manager.SaveOrUpdate(row);
+                }
+                Core.Models.OperateLogDto.SaveLog("四情监测-虫情", "编辑", null, null);
+                return ("success");
+            }
+            catch(Exception ex)
+            {
+                Core.Models.OperateLogDto.SaveLog("四情监测-虫情", "编辑-异常", null, ex);
+                return ("保存失败！");
+            }
+        }
+
+        public string SaveOrUpdateSj(Sqjccqsj row)
+        {
+            try
+            {
+                using (NHibernateSession session = new NHibernateSession(LSMISConnectionManager.GetRunningLSMISDatabaseConnection()))
+                {
+                    var manager = ManagerFactory.Instance.CreateSqjccqsjManager(session);
+                    manager.SaveOrUpdate(row);
+                }
+                Core.Models.OperateLogDto.SaveLog("四情监测-虫情数据", "编辑", null, null);
+                return ("success");
+            }
+            catch (Exception ex)
+            {
+                Core.Models.OperateLogDto.SaveLog("四情监测-虫情数据", "编辑-异常", null, ex);
+                return ("fail");
+            }
+        }
+
+        public string DeleteData(int id)
+        {
+            try
+            {
+                using (NHibernateSession session = new NHibernateSession(LSMISConnectionManager.GetRunningLSMISDatabaseConnection()))
+                {
+                    var manager = ManagerFactory.Instance.CreateSqjccqManager(session);
+                    var row=manager.GetById(id);
+                    manager.Delete(row);
+                }
+                Core.Models.OperateLogDto.SaveLog("四情监测-虫情", "删除", null, null);
+                return ("success");
+            }
+            catch (Exception ex)
+            {
+                Core.Models.OperateLogDto.SaveLog("四情监测-虫情", "删除-异常", null, ex);
+                return ("fail");
+            }
+        }
+
+        public string DeleteSj(int id)
+        {
+            try
+            {
+                using (NHibernateSession session = new NHibernateSession(LSMISConnectionManager.GetRunningLSMISDatabaseConnection()))
+                {
+                    var manager = ManagerFactory.Instance.CreateSqjccqsjManager(session);
+                    var row = manager.GetById(id);
+                    manager.Delete(row);
+                }
+                Core.Models.OperateLogDto.SaveLog("四情监测-虫情数据", "删除", null, null);
+                return ("success");
+            }
+            catch (Exception ex)
+            {
+                Core.Models.OperateLogDto.SaveLog("四情监测-虫情数据", "删除-异常", null, ex);
+                return ("fail");
+            }
+        }
+
+    }
+}
+]]>
+  </BaseCode>
+</node>

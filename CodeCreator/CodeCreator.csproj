@@ -153,6 +153,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="CodeTemplates\Nhibernate\MVC\Controller.xml" />
+    <Content Include="CodeTemplates\Nhibernate\MVC\JavaScript.xml" />
     <Content Include="CodeTemplates\Nhibernate\MVC\View.xml" />
     <Content Include="CodeTemplates\Nhibernate\MVC\Model.xml" />
     <Content Include="CodeTemplates\View\View.xml">

@@ -125,5 +125,10 @@ namespace CodeCreator.Utils
             }
             FileUtils.ShowResult();
         }
+
+        public static void PublicCode()
+        {
+
+        }
     }
 }
